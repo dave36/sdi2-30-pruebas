@@ -1,1 +1,1 @@
-# sdi2-30-pruebas
+# Pruebas SDI - 2 Práctica
