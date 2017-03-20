@@ -52,10 +52,10 @@ public class SDI2_30Tests {
 	// PRUEBAS
 	// ADMINISTRADOR
 	// PR01: Autentificar correctamente al administrador.
-	// @Test
-	// public void prueba01() {
-	// testLoginParametros("form-login", "administrador1", "administrador1");
-	// }
+	@Test
+	public void prueba01() {
+		testLoginParametros("form-admin", "administrador1", "administrador1");
+	}
 
 	public void testLoginParametros(String nombreform, String usuario,
 			String contraseña) {
@@ -64,7 +64,7 @@ public class SDI2_30Tests {
 
 		// Esperamos a que se cargue la pagina del admin
 		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-admin", 10);
+		SeleniumUtils.EsperaCargaPagina(driver, "id", nombreform, 10);
 
 		// Comprobamos que aparezca el mensaje para el administrador
 		SeleniumUtils.textoPresentePagina(driver, usuario);
@@ -73,30 +73,33 @@ public class SDI2_30Tests {
 	// PR02: Fallo en la autenticación del administrador por introducir mal el
 	// login.
 	@Test
-	public void prueba02() {
-		testLoginErroneoParametros("form-login", "administradormal",
-				"administrador1");
+	public void prueba02() throws InterruptedException {
+		testLoginErroneoParametros("form-admin", "administradormal",
+				"administrador1", "Usuario o clave no valida");
 	}
 
 	// PR03: Fallo en la autenticación del administrador por introducir mal la
 	// password.
 	@Test
-	public void prueba03() {
-		testLoginErroneoParametros("form-login", "administrador1",
-				"administradormal");
+	public void prueba03() throws InterruptedException {
+		testLoginErroneoParametros("form-admin", "administrador1",
+				"administradormal", "Usuario o clave no valida");
 	}
 
 	public void testLoginErroneoParametros(String nombreform, String usuario,
-			String contraseña) {
+			String contraseña, String textoPresente)
+			throws InterruptedException {
 		// Vamos a rellenar el formulario
 		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
 
 		// Esperamos a que se cargue la pagina del admin
 		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-admin", 10);
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-login", 10);
+
+		Thread.sleep(500);
 
 		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, "error");
+		SeleniumUtils.textoPresentePagina(driver, textoPresente);
 	}
 
 	// PR04: Probar que la base de datos contiene los datos insertados con
@@ -107,10 +110,10 @@ public class SDI2_30Tests {
 	}
 
 	// PR05: Visualizar correctamente la lista de usuarios normales.
-	// @Test
-	// public void prueba05() {
-	// testVisualizarUsuarios("form-login", "administrador1", "administrador1");
-	// }
+	@Test
+	public void prueba05() {
+		testVisualizarUsuarios("form-admin", "administrador1", "administrador1");
+	}
 
 	public void testVisualizarUsuarios(String nombreform, String usuario,
 			String contraseña) {
@@ -140,14 +143,17 @@ public class SDI2_30Tests {
 	// PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de
 	// entrar con el usuario que se desactivado.
 	@Test
-	public void prueba06() {
-		testModificarStatus("form-login", "administrador1", "administrador1",
+	public void prueba06() throws InterruptedException {
+		testModificarStatus("form-admin", "administrador1", "administrador1",
 				"DISABLED");
-		testLoginErroneoParametros("form-login", "usuario1", "usuario1");
+		// Volvemos a arrancar el driver en la pagina inicial
+		run();
+		testLoginErroneoParametros("form-login", "usuario1", "usuario1",
+				"Usuario o clave no valida");
 	}
 
 	public void testModificarStatus(String nombreform, String usuario,
-			String contraseña, String status) {
+			String contraseña, String status) throws InterruptedException {
 		// Vamos a rellenar el formulario
 		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
 
@@ -178,6 +184,8 @@ public class SDI2_30Tests {
 		By boton = By.id("form-usuarios:modificar");
 		driver.findElement(boton).click();
 
+		Thread.sleep(500);
+
 		// Obtenemos el valor de la celda que contiene el status del usuario
 		// que acabamos de modificar
 		List<WebElement> estado = SeleniumUtils.EsperaCargaPagina(driver, "id",
@@ -190,10 +198,12 @@ public class SDI2_30Tests {
 	// PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de
 	// entrar con el usuario que se ha activado.
 	@Test
-	public void prueba07() {
+	public void prueba07() throws InterruptedException {
 		testModificarStatus("form-login", "administrador1", "administrador1",
 				"ENABLED");
-		testLoginParametros("form-login", "usuario1", "usuario1");
+		// Volvemos a arrancar el driver en la pagina inicial
+		run();
+		testLoginParametros("form-usuario", "usuario1", "usuario1");
 	}
 
 	// PR08: Ordenar por Login
@@ -332,11 +342,13 @@ public class SDI2_30Tests {
 	@Test
 	public void prueba13() throws InterruptedException {
 		testRegistroIncorrecto("usuarioprueba1", "usuarioprueba1@gmail.com",
-				"usuarioprueba1", "usuarioprueba1");
+				"usuarioprueba1", "usuarioprueba1",
+				"El nombre repetido en el sistema");
 	}
 
 	public void testRegistroIncorrecto(String usuario, String email,
-			String contraseña, String contraseña2) throws InterruptedException {
+			String contraseña, String contraseña2, String mensajeError)
+			throws InterruptedException {
 		// Clickamos en el link del registro
 		SeleniumUtils.ClickLink(driver, "linkRegistro");
 
@@ -348,25 +360,28 @@ public class SDI2_30Tests {
 				contraseña, contraseña2);
 
 		// Esperamos a que se cargue la pagina de login
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-login", 10);
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-registro", 10);
 
-		// Comprobamos que se produce un error al estar repetido el usuario
-		SeleniumUtils.textoPresentePagina(driver, "error");
-
+		Thread.sleep(500);
+		
+		// Comprobamos que se produce un error al estar mal el registro
+		SeleniumUtils.textoPresentePagina(driver, mensajeError);
 	}
 
 	// PR14: Crear una cuenta de usuario normal con Email incorrecto.
 	@Test
 	public void prueba14() throws InterruptedException {
-		testRegistroIncorrecto("usuariopruebaemail", "usuarioprueba1@gmail.com", 
-				"usuariopruebaemail1", "usuariopruebaemail1");
+		testRegistroIncorrecto("usuariopruebaemail",
+				"emailincorrecto", "usuariopruebaemail1",
+				"usuariopruebaemail1", "La estructura del Email es incorrecta");
 	}
 
 	// PR15: Crear una cuenta de usuario normal con Password incorrecta.
 	@Test
 	public void prueba15() throws InterruptedException {
-		testRegistroIncorrecto("usuarioprueba1", "emailincorrecto",
-				"usuarioprueba1", "usuarioprueba2");
+		testRegistroIncorrecto("usuariocontraseña", "usuarioprueba1@gmail.com",
+				"usuarioprueba1", "usuarioprueba2",
+				"Las contraseñas deben coincidir");
 	}
 
 	// USUARIO
