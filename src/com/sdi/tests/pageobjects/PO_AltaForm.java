@@ -49,7 +49,7 @@ public class PO_AltaForm {
 	}
 
 	public void rellenaFormularioRegistro(WebDriver driver, String usuario,
-			String email, String contraseña) {
+			String email, String contraseña, String contraseña2) {
 		WebElement campoUsuario = driver
 				.findElement(By.id("form-registro:nombre"));
 		campoUsuario.click();
@@ -69,7 +69,7 @@ public class PO_AltaForm {
 				.id("form-registro:passwConf"));
 		campoRepitaContraseña.click();
 		campoRepitaContraseña.clear();
-		campoRepitaContraseña.sendKeys(contraseña);
+		campoRepitaContraseña.sendKeys(contraseña2);
 		// Pulsar el boton de Registro
 		By boton = By.id("form-registro:registrar");
 		driver.findElement(boton).click();

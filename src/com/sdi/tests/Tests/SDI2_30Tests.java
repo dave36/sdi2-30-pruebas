@@ -302,25 +302,25 @@ public class SDI2_30Tests {
 	// PR12: Crear una cuenta de usuario normal con datos válidos.
 	@Test
 	public void prueba12() throws InterruptedException {
-		testRegistroCorrecto("usuarioprueba1", 
-				"usuarioprueba1@gmail.com",	"usuarioprueba1");
+		testRegistroCorrecto("usuarioprueba1", "usuarioprueba1@gmail.com",
+				"usuarioprueba1", "usuarioprueba1");
 	}
 
-	public void testRegistroCorrecto(String usuario,
-			String email, String contraseña) throws InterruptedException {
+	public void testRegistroCorrecto(String usuario, String email,
+			String contraseña, String contraseña2) throws InterruptedException {
 		// Clickamos en el link del registro
 		SeleniumUtils.ClickLink(driver, "linkRegistro");
 
 		// Esperamos a que avance la página al clickar el link
 		Thread.sleep(500);
-		
+
 		// Rellenamos el formulario del registro
 		new PO_AltaForm().rellenaFormularioRegistro(driver, usuario, email,
-				contraseña);
+				contraseña, contraseña2);
 
 		// Esperamos a que se cargue la pagina de login
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-login", 10);
-		
+
 		// Comprobamos que estamos en la ventana del login
 		// y aparezca el login
 		SeleniumUtils.textoPresentePagina(driver, "Iniciar sesión");
@@ -331,25 +331,25 @@ public class SDI2_30Tests {
 	// PR13: Crear una cuenta de usuario normal con login repetido.
 	@Test
 	public void prueba13() throws InterruptedException {
-		testRegistroIncorrecto("usuarioprueba1", 
-				"usuarioprueba1@gmail.com",	"usuarioprueba1", "usuarioprueba1");
+		testRegistroIncorrecto("usuarioprueba1", "usuarioprueba1@gmail.com",
+				"usuarioprueba1", "usuarioprueba1");
 	}
-	
-	public void testRegistroIncorrecto(String usuario, String email, 
+
+	public void testRegistroIncorrecto(String usuario, String email,
 			String contraseña, String contraseña2) throws InterruptedException {
 		// Clickamos en el link del registro
 		SeleniumUtils.ClickLink(driver, "linkRegistro");
 
 		// Esperamos a que avance la página al clickar el link
 		Thread.sleep(500);
-		
+
 		// Rellenamos el formulario del registro
 		new PO_AltaForm().rellenaFormularioRegistro(driver, usuario, email,
-				contraseña);
+				contraseña, contraseña2);
 
 		// Esperamos a que se cargue la pagina de login
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-login", 10);
-		
+
 		// Comprobamos que se produce un error al estar repetido el usuario
 		SeleniumUtils.textoPresentePagina(driver, "error");
 
@@ -358,15 +358,15 @@ public class SDI2_30Tests {
 	// PR14: Crear una cuenta de usuario normal con Email incorrecto.
 	@Test
 	public void prueba14() throws InterruptedException {
-		testRegistroIncorrecto("usuariopruebaemail", 
-				"usuarioprueba1@gmail.com", "usuarioprueba1", "usuarioprueba1");
+		testRegistroIncorrecto("usuariopruebaemail", "usuarioprueba1@gmail.com", 
+				"usuariopruebaemail1", "usuariopruebaemail1");
 	}
 
 	// PR15: Crear una cuenta de usuario normal con Password incorrecta.
 	@Test
 	public void prueba15() throws InterruptedException {
-		testRegistroIncorrecto("usuarioprueba1", 
-				"emailincorrecto", "usuarioprueba1", "usuarioprueba2");
+		testRegistroIncorrecto("usuarioprueba1", "emailincorrecto",
+				"usuarioprueba1", "usuarioprueba2");
 	}
 
 	// USUARIO
