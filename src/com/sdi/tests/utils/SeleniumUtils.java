@@ -27,6 +27,13 @@ public class SeleniumUtils {
 			By locator = By.id(opcionclick);
 			driver.findElement(locator).click();			
 		}
+		
+		static public void ClickLink(WebDriver driver, String link)
+		{
+			//Pinchamos sobre el link
+			By locator = By.id(link);
+			driver.findElement(locator).click();			
+		}
 
 		static public void textoPresentePagina(WebDriver driver, String texto)
 		{
