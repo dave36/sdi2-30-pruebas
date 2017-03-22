@@ -28,6 +28,16 @@ public class SeleniumUtils {
 			driver.findElement(locator).click();			
 		}
 		
+		static public void ClickCheckbox(WebDriver driver, String checkbox) {
+			driver.findElement(By.xpath("//div[@id='form-usuario:"+checkbox+"']/div[2]/span")).click();
+		}
+		
+		static public WebElement ClickCelda(WebDriver driver, String tabla, 
+				int fila, int columna) {
+			return driver.findElement(By.xpath("//tbody[@id='"+
+						tabla+"']/tr["+fila+"]/td["+columna+"]"));
+		}
+		
 		static public void ClickLink(WebDriver driver, String link)
 		{
 			//Pinchamos sobre el link

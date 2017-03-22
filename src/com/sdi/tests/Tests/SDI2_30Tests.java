@@ -10,15 +10,13 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-import com.sdi.tests.pageobjects.PO_AltaForm;
-import com.sdi.tests.utils.SeleniumUtils;
+import com.sdi.tests.pageobjects.*;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -54,52 +52,23 @@ public class SDI2_30Tests {
 	// PR01: Autentificar correctamente al administrador.
 	@Test
 	public void prueba01() {
-		testLoginParametros("form-admin", "administrador1", "administrador1");
-	}
-
-	public void testLoginParametros(String nombreform, String usuario,
-			String contraseña) {
-		// Vamos a rellenar el formulario
-		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
-
-		// Esperamos a que se cargue la pagina del admin
-		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", nombreform, 10);
-
-		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, usuario);
+		PO_Login.testLoginParametros(driver, "form-admin", "admin1", "admin1");
 	}
 
 	// PR02: Fallo en la autenticación del administrador por introducir mal el
 	// login.
 	@Test
 	public void prueba02() throws InterruptedException {
-		testLoginErroneoParametros("form-admin", "administradormal",
-				"administrador1", "Usuario o clave no valida");
+		PO_Login.testLoginErroneoParametros(driver, "form-admin",
+				"administradormal", "admin1", "Usuario o clave no valida");
 	}
 
 	// PR03: Fallo en la autenticación del administrador por introducir mal la
 	// password.
 	@Test
 	public void prueba03() throws InterruptedException {
-		testLoginErroneoParametros("form-admin", "administrador1",
+		PO_Login.testLoginErroneoParametros(driver, "form-admin", "admin1",
 				"administradormal", "Usuario o clave no valida");
-	}
-
-	public void testLoginErroneoParametros(String nombreform, String usuario,
-			String contraseña, String textoPresente)
-			throws InterruptedException {
-		// Vamos a rellenar el formulario
-		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
-
-		// Esperamos a que se cargue la pagina del admin
-		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-login", 10);
-
-		Thread.sleep(500);
-
-		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, textoPresente);
 	}
 
 	// PR04: Probar que la base de datos contiene los datos insertados con
@@ -112,266 +81,84 @@ public class SDI2_30Tests {
 	// PR05: Visualizar correctamente la lista de usuarios normales.
 	@Test
 	public void prueba05() {
-		testVisualizarUsuarios("form-admin", "administrador1", "administrador1");
-	}
-
-	public void testVisualizarUsuarios(String nombreform, String usuario,
-			String contraseña) {
-		// Vamos a rellenar el formulario
-		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
-
-		// Esperamos a que se cargue la pagina del admin
-		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-admin", 10);
-
-		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-
-		// Pinchamos la opción de menu Usuarios
-		SeleniumUtils.ClickSubopcionMenuHover(driver,
-				"form-cabecera:submenuOpciones",
-				"form-cabecera:menuitemUsuarios");
-
-		// Esperamos a que se cargue la pagina del listado de usuarios
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuarios", 10);
-
-		// Comprobamos que aparezca el elemento en la tabla
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-		SeleniumUtils.textoPresentePagina(driver, "usuario1");
+		PO_Usuarios.testVisualizarUsuarios(driver, "form-admin", "admin1",
+				"admin1");
 	}
 
 	// PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de
 	// entrar con el usuario que se desactivado.
 	@Test
 	public void prueba06() throws InterruptedException {
-		testModificarStatus("form-admin", "administrador1", "administrador1",
-				"DISABLED");
+		PO_Usuarios.testModificarStatus(driver, "form-admin", "admin1",
+				"admin1", "DISABLED");
 		// Volvemos a arrancar el driver en la pagina inicial
+		end();
 		run();
-		testLoginErroneoParametros("form-login", "usuario1", "usuario1",
-				"Usuario o clave no valida");
-	}
-
-	public void testModificarStatus(String nombreform, String usuario,
-			String contraseña, String status) throws InterruptedException {
-		// Vamos a rellenar el formulario
-		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
-
-		// Esperamos a que se cargue la pagina del admin
-		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-admin", 10);
-
-		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-
-		// Pinchamos la opción de menu Usuarios
-		SeleniumUtils.ClickSubopcionMenuHover(driver,
-				"form-cabecera:submenuOpciones",
-				"form-cabecera:menuitemUsuarios");
-
-		// Esperamos a que se cargue la pagina del listado de usuarios
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver,
-				"id", "form-usuarios:tablalistado:0:filaId", 10);
-
-		// Comprobamos que aparezca el elemento en la tabla
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-		SeleniumUtils.textoPresentePagina(driver, "usuario1");
-
-		// Clickamos en el primer elemento de la tabla
-		elementos.get(0).click();
-
-		// Cambiamos el status del elemento seleccionado
-		By boton = By.id("form-usuarios:modificar");
-		driver.findElement(boton).click();
-
-		Thread.sleep(500);
-
-		// Obtenemos el valor de la celda que contiene el status del usuario
-		// que acabamos de modificar
-		List<WebElement> estado = SeleniumUtils.EsperaCargaPagina(driver, "id",
-				"form-usuarios:tablalistado:0:filaStatus", 10);
-
-		// Comprobamos que el estado del usuario pasa a DISABLED
-		assertEquals(status, estado.get(0).getText());
+		PO_Login.testLoginErroneoParametros(driver, "form-login", "user1",
+				"user1", "Usuario o clave no valida");
 	}
 
 	// PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de
 	// entrar con el usuario que se ha activado.
 	@Test
 	public void prueba07() throws InterruptedException {
-		testModificarStatus("form-login", "administrador1", "administrador1",
-				"ENABLED");
+		PO_Usuarios.testModificarStatus(driver, "form-login", "admin1",
+				"admin1", "ENABLED");
 		// Volvemos a arrancar el driver en la pagina inicial
+		end();
 		run();
-		testLoginParametros("form-usuario", "usuario1", "usuario1");
+		PO_Login.testLoginParametros(driver, "form-usuario", "user1", "user1");
 	}
 
 	// PR08: Ordenar por Login
 	@Test
 	public void prueba08() throws InterruptedException {
-		testOrdenar("form-login", "administrador1", "administrador1",
-				"form-usuarios:tablalistado:headerNombre", "administrador1");
-	}
-
-	public void testOrdenar(String nombreform, String usuario,
-			String contraseña, String elementoAOrdenar, String valorEsperado)
-			throws InterruptedException {
-		// Vamos a rellenar el formulario
-		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
-
-		// Esperamos a que se cargue la pagina del admin
-		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-admin", 10);
-
-		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-
-		// Pinchamos la opción de menu Usuarios
-		SeleniumUtils.ClickSubopcionMenuHover(driver,
-				"form-cabecera:submenuOpciones",
-				"form-cabecera:menuitemUsuarios");
-
-		// Esperamos a que se cargue la pagina del listado de usuarios
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver,
-				"id", elementoAOrdenar, 10);
-
-		// Comprobamos que aparezca el elemento en la tabla
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-		SeleniumUtils.textoPresentePagina(driver, "usuario1");
-
-		// Clickamos en el nombre para ordenar por login
-		elementos.get(0).click();
-		Thread.sleep(500);
-
-		// Obtenemos el valor de la celda que contiene el status del usuario
-		// que acabamos de modificar
-		List<WebElement> login = SeleniumUtils.EsperaCargaPagina(driver, "id",
-				"form-usuarios:tablalistado:0:filaNombre", 10);
-
-		// Comprobamos que el estado del usuario pasa a DISABLED
-		assertEquals(valorEsperado, login.get(0).getText());
+		PO_Usuarios.testOrdenar(driver, "form-login", "admin1", "admin1",
+				"form-usuarios:tablalistado:headerNombre", "admin1");
 	}
 
 	// PR09: Ordenar por Email
 	@Test
 	public void prueba09() throws InterruptedException {
-		testOrdenar("form-login", "administrador1", "administrador1",
-				"form-usuarios:tablalistado:headerEmail", "administrador1");
+		PO_Usuarios.testOrdenar(driver, "form-login", "administrador1",
+				"administrador1", "form-usuarios:tablalistado:headerEmail",
+				"administrador1");
 	}
 
 	// PR10: Ordenar por Status
 	@Test
 	public void prueba10() throws InterruptedException {
-		testOrdenar("form-login", "administrador1", "administrador1",
-				"form-usuarios:tablalistado:headerStatus", "usuario1");
+		PO_Usuarios.testOrdenar(driver, "form-login", "administrador1",
+				"administrador1", "form-usuarios:tablalistado:headerStatus",
+				"usuario1");
 	}
 
 	// PR11: Borrar una cuenta de usuario normal y datos relacionados.
 	@Test
 	public void prueba11() throws InterruptedException {
-		testBorrarCuenta("form-login", "administrador1", "administrador1",
-				"form-usuarios:tablalistado:2:filaId", "");
-	}
-
-	public void testBorrarCuenta(String nombreform, String usuario,
-			String contraseña, String elementoABorrar, String valorEsperado)
-			throws InterruptedException {
-		// Vamos a rellenar el formulario
-		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
-
-		// Esperamos a que se cargue la pagina del admin
-		// concretamente el formulario
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-admin", 10);
-
-		// Comprobamos que aparezca el mensaje para el administrador
-		SeleniumUtils.textoPresentePagina(driver, usuario);
-
-		// Pinchamos la opción de menu Usuarios
-		SeleniumUtils.ClickSubopcionMenuHover(driver,
-				"form-cabecera:submenuOpciones",
-				"form-cabecera:menuitemUsuarios");
-
-		// Esperamos a que se cargue la pagina del listado de usuarios
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver,
-				"id", elementoABorrar, 10);
-
-		// Clickamos en el nombre para ordenar por login
-		elementos.get(0).click();
-
-		// Cambiamos el status del elemento seleccionado
-		By boton = By.id("form-usuarios:delete");
-		driver.findElement(boton).click();
-
-		// Esperamos a que se borre el usuario3
-		Thread.sleep(500);
-
-		// Comprobamos que no aparezca el usuario3 en la tabla
-		SeleniumUtils.textoNoPresentePagina(driver, "usuario3");
+		PO_Usuarios.testBorrarCuenta(driver, "form-login", "administrador1",
+				"administrador1", "form-usuarios:tablalistado:2:filaId", "");
 	}
 
 	// PR12: Crear una cuenta de usuario normal con datos válidos.
 	@Test
 	public void prueba12() throws InterruptedException {
-		testRegistroCorrecto("usuarioprueba1", "usuarioprueba1@gmail.com",
-				"usuarioprueba1", "usuarioprueba1");
-	}
-
-	public void testRegistroCorrecto(String usuario, String email,
-			String contraseña, String contraseña2) throws InterruptedException {
-		// Clickamos en el link del registro
-		SeleniumUtils.ClickLink(driver, "linkRegistro");
-
-		// Esperamos a que avance la página al clickar el link
-		Thread.sleep(500);
-
-		// Rellenamos el formulario del registro
-		new PO_AltaForm().rellenaFormularioRegistro(driver, usuario, email,
-				contraseña, contraseña2);
-
-		// Esperamos a que se cargue la pagina de login
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-login", 10);
-
-		// Comprobamos que estamos en la ventana del login
-		// y aparezca el login
-		SeleniumUtils.textoPresentePagina(driver, "Iniciar sesión");
-		SeleniumUtils.textoPresentePagina(driver, "Usuario");
-		SeleniumUtils.textoPresentePagina(driver, "Contraseña");
+		PO_Usuarios.testRegistroCorrecto(driver, "usuarioprueba1",
+				"usuarioprueba1@gmail.com", "usuarioprueba1", "usuarioprueba1");
 	}
 
 	// PR13: Crear una cuenta de usuario normal con login repetido.
 	@Test
 	public void prueba13() throws InterruptedException {
-		testRegistroIncorrecto("usuarioprueba1", "usuarioprueba1@gmail.com",
-				"usuarioprueba1", "usuarioprueba1",
+		PO_Usuarios.testRegistroIncorrecto(driver, "usuarioprueba1",
+				"usuarioprueba1@gmail.com", "usuarioprueba1", "usuarioprueba1",
 				"El nombre repetido en el sistema");
-	}
-
-	public void testRegistroIncorrecto(String usuario, String email,
-			String contraseña, String contraseña2, String mensajeError)
-			throws InterruptedException {
-		// Clickamos en el link del registro
-		SeleniumUtils.ClickLink(driver, "linkRegistro");
-
-		// Esperamos a que avance la página al clickar el link
-		Thread.sleep(500);
-
-		// Rellenamos el formulario del registro
-		new PO_AltaForm().rellenaFormularioRegistro(driver, usuario, email,
-				contraseña, contraseña2);
-
-		// Esperamos a que se cargue la pagina de login
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-registro", 10);
-
-		Thread.sleep(500);
-		
-		// Comprobamos que se produce un error al estar mal el registro
-		SeleniumUtils.textoPresentePagina(driver, mensajeError);
 	}
 
 	// PR14: Crear una cuenta de usuario normal con Email incorrecto.
 	@Test
 	public void prueba14() throws InterruptedException {
-		testRegistroIncorrecto("usuariopruebaemail",
+		PO_Usuarios.testRegistroIncorrecto(driver, "usuariopruebaemail",
 				"emailincorrecto", "usuariopruebaemail1",
 				"usuariopruebaemail1", "La estructura del Email es incorrecta");
 	}
@@ -379,8 +166,8 @@ public class SDI2_30Tests {
 	// PR15: Crear una cuenta de usuario normal con Password incorrecta.
 	@Test
 	public void prueba15() throws InterruptedException {
-		testRegistroIncorrecto("usuariocontraseña", "usuarioprueba1@gmail.com",
-				"usuarioprueba1", "usuarioprueba2",
+		PO_Usuarios.testRegistroIncorrecto(driver, "usuariocontraseña",
+				"usuarioprueba1@gmail.com", "usuarioprueba1", "usuarioprueba2",
 				"Las contraseñas deben coincidir");
 	}
 
@@ -389,14 +176,15 @@ public class SDI2_30Tests {
 	// categoría y que son las que tienen que. Usar paginación navegando por las
 	// tres páginas.
 	@Test
-	public void prueba16() {
-		assertTrue(false);
+	public void prueba16() throws InterruptedException {
+		PO_ListadoTareas.testListarInbox(driver, "user1", "user1");
 	}
 
 	// PR17: Funcionamiento correcto de la ordenación por fecha planeada.
 	@Test
-	public void prueba17() {
-		assertTrue(false);
+	public void prueba17() throws InterruptedException {
+		PO_ListadoTareas.testOrdenarPorFecha(driver, "user1", "user1",
+				"11/03/2017");
 	}
 
 	// PR18: Funcionamiento correcto del filtrado.
