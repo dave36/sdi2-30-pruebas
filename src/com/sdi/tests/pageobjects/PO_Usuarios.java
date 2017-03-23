@@ -142,18 +142,22 @@ public class PO_Usuarios {
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver,
 				"id", elementoABorrar, 10);
 
-		// Clickamos en el nombre para ordenar por login
+		// Clickamos en el nombre del usario a borrar
 		elementos.get(0).click();
 
-		// Cambiamos el status del elemento seleccionado
+		// Clickamos en el boton de eliminar usuario
 		By boton = By.id("form-usuarios:delete");
 		driver.findElement(boton).click();
 
-		// Esperamos a que se borre el usuario3
+		// Confirmamos el borrado del usuario
+		By botonSi = By.id("form-usuarios:si");
+		driver.findElement(botonSi).click();
+		
+		// Esperamos a que se borre el user3
 		Thread.sleep(500);
 
 		// Comprobamos que no aparezca el usuario3 en la tabla
-		SeleniumUtils.textoNoPresentePagina(driver, "usuario3");
+		SeleniumUtils.textoNoPresentePagina(driver, "user3");
 	}
 
 	public static void testRegistroCorrecto(WebDriver driver, String usuario,

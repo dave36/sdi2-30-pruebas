@@ -120,24 +120,24 @@ public class SDI2_30Tests {
 	// PR09: Ordenar por Email
 	@Test
 	public void prueba09() throws InterruptedException {
-		PO_Usuarios.testOrdenar(driver, "form-login", "administrador1",
-				"administrador1", "form-usuarios:tablalistado:headerEmail",
-				"administrador1");
+		PO_Usuarios.testOrdenar(driver, "form-login", "admin1",
+				"admin1", "form-usuarios:tablalistado:headerEmail",
+				"admin1");
 	}
 
 	// PR10: Ordenar por Status
 	@Test
 	public void prueba10() throws InterruptedException {
-		PO_Usuarios.testOrdenar(driver, "form-login", "administrador1",
-				"administrador1", "form-usuarios:tablalistado:headerStatus",
-				"usuario1");
+		PO_Usuarios.testOrdenar(driver, "form-login", "admin1",
+				"admin1", "form-usuarios:tablalistado:headerStatus",
+				"user1");
 	}
 
 	// PR11: Borrar una cuenta de usuario normal y datos relacionados.
 	@Test
 	public void prueba11() throws InterruptedException {
-		PO_Usuarios.testBorrarCuenta(driver, "form-login", "administrador1",
-				"administrador1", "form-usuarios:tablalistado:2:filaId", "");
+		PO_Usuarios.testBorrarCuenta(driver, "form-login", "admin1",
+				"admin1", "form-usuarios:tablalistado:2:filaId", "");
 	}
 
 	// PR12: Crear una cuenta de usuario normal con datos válidos.
@@ -184,7 +184,7 @@ public class SDI2_30Tests {
 	@Test
 	public void prueba17() throws InterruptedException {
 		PO_ListadoTareas.testOrdenarPorFecha(driver, "user1", "user1",
-				"11/03/2017");
+				"11/03/2017", "cbSemana");
 	}
 
 	// PR18: Funcionamiento correcto del filtrado.
@@ -195,14 +195,16 @@ public class SDI2_30Tests {
 
 	// PR19: Funcionamiento correcto de la ordenación por categoría.
 	@Test
-	public void prueba19() {
-		assertTrue(false);
+	public void prueba19() throws InterruptedException {
+		PO_ListadoTareas.testOrdenarPorCategoria(driver, "user1", "user1",
+				"1", "cbHoy");
 	}
 
 	// PR20: Funcionamiento correcto de la ordenación por fecha planeada.
 	@Test
-	public void prueba20() {
-		assertTrue(false);
+	public void prueba20() throws InterruptedException {
+		PO_ListadoTareas.testOrdenarPorFecha(driver, "user1", "user1",
+				"11/03/2017", "cbHoy");
 	}
 
 	// PR21: Comprobar que las tareas que no están en rojo son las de hoy y
@@ -228,14 +230,17 @@ public class SDI2_30Tests {
 
 	// PR24: Funcionamiento correcto de la ordenación por día.
 	@Test
-	public void prueba24() {
-		assertTrue(false);
+	public void prueba24() throws InterruptedException {
+		PO_ListadoTareas.testOrdenarPorFecha(driver, "user1", "user1",
+				"11/03/2017", "cbSemana");
 	}
 
 	// PR25: Funcionamiento correcto de la ordenación por nombre.
 	@Test
-	public void prueba25() {
-		assertTrue(false);
+	public void prueba25() throws InterruptedException {
+		String[] nombresEsperados = { "Tarea10", "Tarea8"};
+		PO_ListadoTareas.testOrdenarPorNombre(driver, "user1", "user1",
+				nombresEsperados, "cbSemana");
 	}
 
 	// PR26: Confirmar una tarea, inhabilitar el filtro de tareas terminadas, ir
@@ -285,20 +290,21 @@ public class SDI2_30Tests {
 	// PR32: Marcar una tarea como finalizada. Comprobar que desaparece de las
 	// tres pseudolistas.
 	@Test
-	public void prueba32() {
-		assertTrue(false);
+	public void prueba32() throws InterruptedException {
+		PO_Tarea.testFinalizarTarea(driver, "user1", "user1",
+				"Tarea30", "cbSemana");
 	}
 
 	// PR33: Salir de sesión desde cuenta de administrador.
 	@Test
 	public void prueba33() {
-		assertTrue(false);
+		PO_CerrarSesion.testCerrarSesion(driver, "admin1", "admin1");
 	}
 
 	// PR34: Salir de sesión desde cuenta de usuario normal.
 	@Test
 	public void prueba34() {
-		assertTrue(false);
+		PO_CerrarSesion.testCerrarSesion(driver, "user1", "user1");
 	}
 
 	// PR35: Cambio del idioma por defecto a un segundo idioma. (Probar algunas
