@@ -74,5 +74,54 @@ public class PO_AltaForm {
 		By boton = By.id("form-registro:registrar");
 		driver.findElement(boton).click();
 	}
+	
+	public void rellenaFormularioAñadirTarea(WebDriver driver, String title,
+			String comments, String categoria, String fecha) {
+		WebElement campoTitulo = driver
+				.findElement(By.id("form-añadirTarea:nombreTarea"));
+		campoTitulo.click();
+		campoTitulo.clear();
+		campoTitulo.sendKeys(title);
+		WebElement campoComentario = driver.findElement(By
+				.id("form-añadirTarea:comentarioTarea"));
+		campoComentario.click();
+		campoComentario.clear();
+		campoComentario.sendKeys(comments);
+		WebElement campoCategoria = driver.findElement(By
+				.id("form-añadirTarea:categoriaTarea"));
+		campoCategoria.click();
+		campoCategoria.clear();
+		campoCategoria.sendKeys(categoria);
+//		WebElement campoFecha = driver.findElement(By
+//				.id("form-añadirTarea:fechaPlaneada"));
+//		campoFecha.click();
+//		campoFecha.clear();
+//		campoFecha.sendKeys(fecha);
+		// Pulsar el boton de IniciarSesión
+		By boton = By.id("form-añadirTarea:crearTarea");
+		driver.findElement(boton).click();
+	}
+	
+	public void rellenaFormularioEditarTarea(WebDriver driver, String title,
+			String comments, String fecha) {
+		WebElement campoTitulo = driver
+				.findElement(By.id("form-añadirTarea:nombreTarea"));
+		campoTitulo.click();
+		campoTitulo.clear();
+		campoTitulo.sendKeys(title);
+		WebElement campoComentario = driver.findElement(By
+				.id("form-añadirTarea:comentarioTarea"));
+		campoComentario.click();
+		campoComentario.clear();
+		campoComentario.sendKeys(comments);
+//		WebElement campoFecha = driver.findElement(By
+//				.id("form-añadirTarea:fechaPlaneada"));
+//		campoFecha.click();
+//		campoFecha.clear();
+//		campoFecha.sendKeys(fecha);
+		// Pulsar el boton de IniciarSesión
+		By boton = By.id("form-editarTarea:editarTarea");
+		driver.findElement(boton).click();
+	}
 
 }

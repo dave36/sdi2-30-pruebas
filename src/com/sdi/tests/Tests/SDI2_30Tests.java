@@ -3,6 +3,7 @@ package com.sdi.tests.Tests;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -15,6 +16,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+
+import alb.util.date.DateUtil;
 
 import com.sdi.tests.pageobjects.*;
 
@@ -120,24 +123,22 @@ public class SDI2_30Tests {
 	// PR09: Ordenar por Email
 	@Test
 	public void prueba09() throws InterruptedException {
-		PO_Usuarios.testOrdenar(driver, "form-login", "admin1",
-				"admin1", "form-usuarios:tablalistado:headerEmail",
-				"admin1");
+		PO_Usuarios.testOrdenar(driver, "form-login", "admin1", "admin1",
+				"form-usuarios:tablalistado:headerEmail", "admin1");
 	}
 
 	// PR10: Ordenar por Status
 	@Test
 	public void prueba10() throws InterruptedException {
-		PO_Usuarios.testOrdenar(driver, "form-login", "admin1",
-				"admin1", "form-usuarios:tablalistado:headerStatus",
-				"user1");
+		PO_Usuarios.testOrdenar(driver, "form-login", "admin1", "admin1",
+				"form-usuarios:tablalistado:headerStatus", "user1");
 	}
 
 	// PR11: Borrar una cuenta de usuario normal y datos relacionados.
 	@Test
 	public void prueba11() throws InterruptedException {
-		PO_Usuarios.testBorrarCuenta(driver, "form-login", "admin1",
-				"admin1", "form-usuarios:tablalistado:2:filaId", "");
+		PO_Usuarios.testBorrarCuenta(driver, "form-login", "admin1", "admin1",
+				"form-usuarios:tablalistado:2:filaId", "");
 	}
 
 	// PR12: Crear una cuenta de usuario normal con datos válidos.
@@ -196,8 +197,8 @@ public class SDI2_30Tests {
 	// PR19: Funcionamiento correcto de la ordenación por categoría.
 	@Test
 	public void prueba19() throws InterruptedException {
-		PO_ListadoTareas.testOrdenarPorCategoria(driver, "user1", "user1",
-				"1", "cbHoy");
+		PO_ListadoTareas.testOrdenarPorCategoria(driver, "user1", "user1", "1",
+				"cbHoy");
 	}
 
 	// PR20: Funcionamiento correcto de la ordenación por fecha planeada.
@@ -210,8 +211,8 @@ public class SDI2_30Tests {
 	// PR21: Comprobar que las tareas que no están en rojo son las de hoy y
 	// además las que deben ser.
 	@Test
-	public void prueba21() {
-		assertTrue(false);
+	public void prueba21() throws InterruptedException {
+		PO_ListadoTareas.testTareasHoyEnRojo(driver, "user1", "user1");
 	}
 
 	// PR22: Comprobar que las tareas retrasadas están en rojo y son las que
@@ -238,7 +239,7 @@ public class SDI2_30Tests {
 	// PR25: Funcionamiento correcto de la ordenación por nombre.
 	@Test
 	public void prueba25() throws InterruptedException {
-		String[] nombresEsperados = { "Tarea10", "Tarea8"};
+		String[] nombresEsperados = { "Tarea10", "Tarea8" };
 		PO_ListadoTareas.testOrdenarPorNombre(driver, "user1", "user1",
 				nombresEsperados, "cbSemana");
 	}
@@ -246,53 +247,60 @@ public class SDI2_30Tests {
 	// PR26: Confirmar una tarea, inhabilitar el filtro de tareas terminadas, ir
 	// a la pagina donde está la tarea terminada y comprobar que se muestra.
 	@Test
-	public void prueba26() {
-		assertTrue(false);
+	public void prueba26() throws InterruptedException {
+		PO_ListadoTareas.testConfirmacionTarea(driver, "user1", "user1",
+				DateUtil.toString(DateUtil.now()));
 	}
 
 	// PR27: Crear una tarea sin categoría y comprobar que se muestra en la
 	// lista Inbox.
 	@Test
-	public void prueba27() {
-		assertTrue(false);
+	public void prueba27() throws InterruptedException {
+		PO_Tarea.testCrearTareaInbox(driver, "user1", "user1",
+				"Tarea de Prueba1", "", "", "form-listadoInbox", "cbInbox");
 	}
 
 	// PR28: Crear una tarea con categoría categoria1 y fecha planeada Hoy y
 	// comprobar que se muestra en la lista Hoy.
 	@Test
-	public void prueba28() {
-		assertTrue(false);
+	public void prueba28() throws InterruptedException {
+		PO_Tarea.testCrearTarea(driver, "user1", "user1", "Tarea de Prueba2",
+				"1", DateUtil.toString(DateUtil.now()), "form-usuarios",
+				"cbHoy");
 	}
 
 	// PR29: Crear una tarea con categoría categoria1 y fecha planeada posterior
 	// a Hoy y comprobar que se muestra en la lista Semana.
 	@Test
-	public void prueba29() {
-		assertTrue(false);
+	public void prueba29() throws InterruptedException {
+		PO_Tarea.testCrearTarea(driver, "user1", "user1", "Tarea de Prueba3",
+				"1", String.valueOf(new Date()), "form-usuarios", "cbSemana");
 	}
 
 	// PR30: Editar el nombre, y categoría de una tarea (se le cambia a
 	// categoría1) de la lista Inbox y comprobar que las tres pseudolista se
 	// refresca correctamente.
 	@Test
-	public void prueba30() {
-		assertTrue(false);
+	public void prueba30() throws InterruptedException {
+		PO_Tarea.testEditarTarea(driver, "user1", "user1", "Tarea editada",
+				"1", "form-listadoInbox", "cbInbox");
 	}
 
 	// PR31: Editar el nombre, y categoría (Se cambia a sin categoría) de una
 	// tarea de la lista Hoy y comprobar que las tres pseudolistas se refrescan
 	// correctamente.
 	@Test
-	public void prueba31() {
-		assertTrue(false);
+	public void prueba31() throws InterruptedException {
+		PO_Tarea.testEditarTarea(driver, "user1", "user1", "Tarea editada", "",
+				"form-usuarios", "cbHoy");
 	}
 
 	// PR32: Marcar una tarea como finalizada. Comprobar que desaparece de las
 	// tres pseudolistas.
 	@Test
 	public void prueba32() throws InterruptedException {
-		PO_Tarea.testFinalizarTarea(driver, "user1", "user1",
-				"Tarea30", "cbSemana");
+		PO_Tarea.testFinalizarTarea(driver, "user1", "user1", "Tarea30",
+				"cbSemana");
 	}
 
 	// PR33: Salir de sesión desde cuenta de administrador.
