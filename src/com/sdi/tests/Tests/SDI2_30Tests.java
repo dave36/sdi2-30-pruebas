@@ -218,15 +218,15 @@ public class SDI2_30Tests {
 	// PR22: Comprobar que las tareas retrasadas están en rojo y son las que
 	// deben ser.
 	@Test
-	public void prueba22() {
-		assertTrue(false);
+	public void prueba22() throws InterruptedException {
+		PO_ListadoTareas.testComprobarTareasEnRojo(driver, "user1", "user1");
 	}
 
 	// PR23: Comprobar que las tareas de hoy y futuras no están en rojo y que
 	// son las que deben ser.
 	@Test
-	public void prueba23() {
-		assertTrue(false);
+	public void prueba23() throws InterruptedException {
+		PO_ListadoTareas.testTareasHoyYFuturas(driver, "user1", "user1");
 	}
 
 	// PR24: Funcionamiento correcto de la ordenación por día.
@@ -333,14 +333,14 @@ public class SDI2_30Tests {
 	// autenticado como usuario normal.
 	@Test
 	public void prueba37() {
-		assertTrue(false);
+		PO_Seguridad.testSeguridadUsuarioAutenticado(driver, "user1", "user1");
 	}
 
 	// PR38: Intento de acceso a un URL privado de usuario normal con un usuario
 	// no autenticado.
 	@Test
 	public void prueba38() {
-		assertTrue(false);
+		PO_Seguridad.testSeguridadUsuarioNoAutenticado(driver);
 	}
 
 }

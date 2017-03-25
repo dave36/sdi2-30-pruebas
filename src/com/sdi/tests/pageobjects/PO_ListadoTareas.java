@@ -155,12 +155,76 @@ public class PO_ListadoTareas {
 		// Esperamos a que se cargue la pagina del listado
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuarios", 10);
 
-		// También comprobamos que cualquier celda de la columna de categorias
-		// sea la cadena vacía
-		WebElement celdaCategoria = SeleniumUtils.ClickCelda(driver,
-				"form-usuarios:tablalistado_data", 18, 1);
-		System.out.println(celdaCategoria.getAttribute("styleclass"));
-		// assertEquals("", celdaCategoria.getClass());
+		// Obtenemos todos los elementos de la tabla que estén en rojo,
+		// es decir, todos los que estén retrasados
+		List<WebElement> elementosRojos = SeleniumUtils.EsperaCargaPagina(
+				driver, "class", "colorRed", 10);
+
+		// Comprobamos que ninguna de las tareas retrasadas tenga la fecha
+		// del día de hoy
+		for (int i = 0; i < elementosRojos.size(); i++)
+			assertEquals(
+					false,
+					elementosRojos.get(i).getText()
+							.contains(DateUtil.toString(DateUtil.now())));
+	}
+
+	public static void testComprobarTareasEnRojo(WebDriver driver,
+			String usuario, String contraseña) throws InterruptedException {
+		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
+
+		// Esperamos a que se cargue la pagina del usuario
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuario", 10);
+
+		// Pinchamos la opción de filtrar la lista de inbox
+		SeleniumUtils.ClickCheckbox(driver, "cbHoy");
+
+		By boton = By.id("form-usuario:filtrar");
+		driver.findElement(boton).click();
+
+		// Esperamos a que se cargue la pagina del listado
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuarios", 10);
+
+		// Obtenemos todos los elementos de la tabla que estén en rojo,
+		// es decir, todos los que estén retrasados
+		List<WebElement> elementosRojos = SeleniumUtils.EsperaCargaPagina(
+				driver, "class", "colorRed", 10);
+
+		// Comprobamos que las tareas en rojo son las que tienen que ser
+		for (int i = 0; i < elementosRojos.size(); i++)
+			assertEquals(true,
+					elementosRojos.get(i).getText()
+							.contains("Tarea" + (11 + i)));
+	}
+
+	public static void testTareasHoyYFuturas(WebDriver driver, String usuario,
+			String contraseña) throws InterruptedException {
+		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
+
+		// Esperamos a que se cargue la pagina del usuario
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuario", 10);
+
+		// Pinchamos la opción de filtrar la lista de inbox
+		SeleniumUtils.ClickCheckbox(driver, "cbSemana");
+
+		By boton = By.id("form-usuario:filtrar");
+		driver.findElement(boton).click();
+
+		// Esperamos a que se cargue la pagina del listado
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuarios", 10);
+
+		// Obtenemos todos los elementos de la tabla que estén en rojo,
+		// es decir, todos los que estén retrasados
+		List<WebElement> elementosRojos = SeleniumUtils.EsperaCargaPagina(
+				driver, "class", "colorRed", 10);
+
+		// Comprobamos que ninguna de las tareas retrasadas tenga la fecha
+		// del día de hoy en el listado de semana
+		for (int i = 0; i < elementosRojos.size(); i++)
+			assertEquals(
+					false,
+					elementosRojos.get(i).getText()
+							.contains(DateUtil.toString(DateUtil.now())));
 	}
 
 	public static void testConfirmacionTarea(WebDriver driver, String usuario,
@@ -198,7 +262,7 @@ public class PO_ListadoTareas {
 
 		// Esperamos a que se cargue la pagina del listado
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-listadoInbox", 10);
-		
+
 		// Cargamos la navegación del listado de inbox
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver,
 				"class", "ui-paginator-last", 10);
