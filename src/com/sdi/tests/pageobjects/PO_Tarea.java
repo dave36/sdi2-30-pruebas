@@ -85,7 +85,7 @@ public class PO_Tarea {
 
 	public static void testEditarTarea(WebDriver driver, String usuario,
 			String contraseña, String nombreTarea, String categoria,
-			String form, String cbLista) throws InterruptedException {
+			String cbLista, String fila) throws InterruptedException {
 		new PO_AltaForm().rellenaFormularioLogin(driver, usuario, contraseña);
 
 		// Esperamos a que se cargue la pagina del usuario
@@ -99,10 +99,13 @@ public class PO_Tarea {
 		Thread.sleep(250);
 
 		// Esperamos a que se cargue la pagina del listado
-		SeleniumUtils.EsperaCargaPagina(driver, "id", form, 10);
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-usuarios", 10);
+		Thread.sleep(250);
 
 		// Seleccionamos la primera tarea de la fila
-		SeleniumUtils.ClickCelda(driver, "", 1, 1);
+		driver.findElement(
+				By.id("form-usuarios:tablalistado:" + fila + ":filaNombre"))
+				.click();
 
 		// Pinchamos en el boton editar tarea
 		By boton2 = By.id("form-usuarios:editarTarea");
@@ -112,8 +115,8 @@ public class PO_Tarea {
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-editarTarea", 10);
 
 		// Rellenamos el formulario para la edición de la tarea
-		new PO_AltaForm().rellenaFormularioAñadirTarea(driver, nombreTarea,
-				"Editando tarea", "1", "");
+		new PO_AltaForm().rellenaFormularioEditarTarea(driver, nombreTarea,
+				"Editando tarea", categoria, "");
 
 		Thread.sleep(500);
 
@@ -152,7 +155,6 @@ public class PO_Tarea {
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:opciones",
 				"form-cabecera:misTareas");
 		Thread.sleep(500);
-		SeleniumUtils.ClickCheckbox(driver, cbLista);
 		SeleniumUtils.ClickCheckbox(driver, "cbHoy");
 
 		By boton3 = By.id("form-usuario:filtrar");

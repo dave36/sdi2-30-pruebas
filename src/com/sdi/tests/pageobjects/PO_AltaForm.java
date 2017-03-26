@@ -1,6 +1,7 @@
 package com.sdi.tests.pageobjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -50,13 +51,13 @@ public class PO_AltaForm {
 
 	public void rellenaFormularioRegistro(WebDriver driver, String usuario,
 			String email, String contraseña, String contraseña2) {
-		WebElement campoUsuario = driver
-				.findElement(By.id("form-registro:nombre"));
+		WebElement campoUsuario = driver.findElement(By
+				.id("form-registro:nombre"));
 		campoUsuario.click();
 		campoUsuario.clear();
 		campoUsuario.sendKeys(usuario);
-		WebElement campoEmail = driver.findElement(By
-				.id("form-registro:email"));
+		WebElement campoEmail = driver
+				.findElement(By.id("form-registro:email"));
 		campoEmail.click();
 		campoEmail.clear();
 		campoEmail.sendKeys(email);
@@ -74,11 +75,12 @@ public class PO_AltaForm {
 		By boton = By.id("form-registro:registrar");
 		driver.findElement(boton).click();
 	}
-	
+
 	public void rellenaFormularioAñadirTarea(WebDriver driver, String title,
-			String comments, String categoria, String fecha) {
-		WebElement campoTitulo = driver
-				.findElement(By.id("form-añadirTarea:nombreTarea"));
+			String comments, String categoria, String fecha)
+			throws InterruptedException {
+		WebElement campoTitulo = driver.findElement(By
+				.id("form-añadirTarea:nombreTarea"));
 		campoTitulo.click();
 		campoTitulo.clear();
 		campoTitulo.sendKeys(title);
@@ -92,33 +94,53 @@ public class PO_AltaForm {
 		campoCategoria.click();
 		campoCategoria.clear();
 		campoCategoria.sendKeys(categoria);
-//		WebElement campoFecha = driver.findElement(By
-//				.id("form-añadirTarea:fechaPlaneada"));
-//		campoFecha.click();
-//		campoFecha.clear();
-//		campoFecha.sendKeys(fecha);
+		if (fecha != "") {
+			WebElement campoFecha = driver.findElement(By
+					.id("form-añadirTarea:fechaPlaneada_input"));
+			campoFecha.click();
+			campoFecha.clear();
+			campoFecha.sendKeys(fecha);
+			// Hacemos click en escape para que se cierre el calendario
+			// que previamente hemos desplegado
+			campoFecha.sendKeys(Keys.ESCAPE);
+			Thread.sleep(500);
+		}
 		// Pulsar el boton de IniciarSesión
 		By boton = By.id("form-añadirTarea:crearTarea");
 		driver.findElement(boton).click();
 	}
-	
+
 	public void rellenaFormularioEditarTarea(WebDriver driver, String title,
-			String comments, String fecha) {
-		WebElement campoTitulo = driver
-				.findElement(By.id("form-añadirTarea:nombreTarea"));
+			String comments, String categoria, String fecha)
+			throws InterruptedException {
+		WebElement campoTitulo = driver.findElement(By
+				.id("form-editarTarea:nombreTarea"));
 		campoTitulo.click();
 		campoTitulo.clear();
 		campoTitulo.sendKeys(title);
 		WebElement campoComentario = driver.findElement(By
-				.id("form-añadirTarea:comentarioTarea"));
+				.id("form-editarTarea:comentarioTarea"));
 		campoComentario.click();
 		campoComentario.clear();
 		campoComentario.sendKeys(comments);
-//		WebElement campoFecha = driver.findElement(By
-//				.id("form-añadirTarea:fechaPlaneada"));
-//		campoFecha.click();
-//		campoFecha.clear();
-//		campoFecha.sendKeys(fecha);
+		WebElement campoCategoria = driver.findElement(By
+				.id("form-editarTarea:categoriaTarea"));
+		campoCategoria.click();
+		// Borramos la categoria que haya previamente en la tarea
+		campoCategoria.sendKeys(Keys.DELETE);
+		campoCategoria.clear();
+		campoCategoria.sendKeys(categoria);
+		if (fecha != "") {
+			WebElement campoFecha = driver.findElement(By
+					.id("form-editarTarea:fechaPlaneada_input"));
+			campoFecha.click();
+			campoFecha.clear();
+			campoFecha.sendKeys(fecha);
+			// Hacemos click en escape para que se cierre el calendario
+			// que previamente hemos desplegado
+			campoFecha.sendKeys(Keys.ESCAPE);
+			Thread.sleep(500);
+		}
 		// Pulsar el boton de IniciarSesión
 		By boton = By.id("form-editarTarea:editarTarea");
 		driver.findElement(boton).click();

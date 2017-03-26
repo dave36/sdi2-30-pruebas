@@ -105,18 +105,17 @@ public class PO_Usuarios {
 
 		// Comprobamos que aparezca el elemento en la tabla
 		SeleniumUtils.textoPresentePagina(driver, usuario);
-		SeleniumUtils.textoPresentePagina(driver, "usuario1");
+		SeleniumUtils.textoPresentePagina(driver, "user1");
 
 		// Clickamos en el nombre para ordenar por login
 		elementos.get(0).click();
 		Thread.sleep(500);
 
-		// Obtenemos el valor de la celda que contiene el status del usuario
-		// que acabamos de modificar
+		// Obtenemos el valor de la celda que el usuario ordenado
 		List<WebElement> login = SeleniumUtils.EsperaCargaPagina(driver, "id",
 				"form-usuarios:tablalistado:0:filaNombre", 10);
 
-		// Comprobamos que el estado del usuario pasa a DISABLED
+		// Comprobamos que es el esperado
 		assertEquals(valorEsperado, login.get(0).getText());
 	}
 
@@ -178,7 +177,7 @@ public class PO_Usuarios {
 
 		// Comprobamos que estamos en la ventana del login
 		// y aparezca el login
-		SeleniumUtils.textoPresentePagina(driver, "Iniciar sesión");
+		SeleniumUtils.textoPresentePagina(driver, "Inicio de sesión");
 		SeleniumUtils.textoPresentePagina(driver, "Usuario");
 		SeleniumUtils.textoPresentePagina(driver, "Contraseña");
 	}
